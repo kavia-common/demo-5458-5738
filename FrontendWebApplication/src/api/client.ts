@@ -32,12 +32,28 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<{ da
   }
 }
 
-// PUBLIC_INTERFACE
+ // PUBLIC_INTERFACE
 export const api = {
   /** List devices (client-side search/sort will be applied in UI) */
   // PUBLIC_INTERFACE
   async listDevices(): Promise<{ data?: Device[]; error?: ApiError }> {
     const res = await request<DeviceListResponse>('/devices', { method: 'GET' });
+    if (res.error) return { error: res.error };
+    return { data: res.data?.devices || [] };
+  },
+
+  /**
+   * PUBLIC_INTERFACE
+   * Fetch devices with optional query params to support backend-side search/sort if available.
+   * Consumers can re-invoke this to refresh devices while preserving current params.
+   */
+  // PUBLIC_INTERFACE
+  async fetchDevices(params?: { search?: string; sort?: string }): Promise<{ data?: Device[]; error?: ApiError }> {
+    const query = new URLSearchParams();
+    if (params?.search) query.set('search', params.search);
+    if (params?.sort) query.set('sort', params.sort);
+    const path = `/devices${query.toString() ? `?${query.toString()}` : ''}`;
+    const res = await request<DeviceListResponse>(path, { method: 'GET' });
     if (res.error) return { error: res.error };
     return { data: res.data?.devices || [] };
   },

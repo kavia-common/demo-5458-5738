@@ -12,6 +12,8 @@ interface Props {
   onDelete: (id: string) => void;
   onPing: (id: string) => void;
   pingLoadingId?: string | null;
+  /** Optional table-level loading indicator (overlay) */
+  loading?: boolean;
 }
 
 // PUBLIC_INTERFACE
@@ -22,6 +24,7 @@ export const DeviceTable: React.FC<Props> = ({
   onDelete,
   onPing,
   pingLoadingId = null,
+  loading = false,
 }) => {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -87,7 +90,41 @@ export const DeviceTable: React.FC<Props> = ({
         />
       </div>
 
-      <div style={{ overflowX: 'auto' }}>
+      <div style={{ position: 'relative', overflowX: 'auto' }}>
+        {loading && (
+          <div
+            aria-live="polite"
+            role="status"
+            aria-busy="true"
+            data-testid="devices-loading"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'rgba(0,0,0,0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 5,
+              backdropFilter: 'blur(1px)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 16,
+                  height: 16,
+                  borderRadius: '50%',
+                  border: '2px solid #9ca3af',
+                  borderTopColor: '#3b82f6',
+                  animation: 'spin 0.9s linear infinite',
+                  display: 'inline-block',
+                }}
+              />
+              <span>Loading devices…</span>
+            </div>
+          </div>
+        )}
         <table className="table" role="table">
           <thead>
             <tr>

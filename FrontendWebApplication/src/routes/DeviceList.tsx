@@ -17,11 +17,15 @@ export const DeviceList: React.FC = () => {
   const location = useLocation();
   const mountedRef = useRef(false);
 
+  // Keep current list params so refresh preserves them
+  const paramsRef = useRef<{ search?: string; sort?: string }>({});
+
   // PUBLIC_INTERFACE
   async function load() {
     setLoading(true);
     setError(null);
-    const res = await api.listDevices();
+    // Use fetchDevices to allow future backend params; still works without params
+    const res = await api.fetchDevices(paramsRef.current);
     if (res.error) {
       setError(res.error.error || 'Failed to load devices.');
       setDevices([]); // ensure empty array on error
@@ -33,8 +37,6 @@ export const DeviceList: React.FC = () => {
 
   // Initial load on mount and when coming back from other routes to ensure fresh data
   useEffect(() => {
-    // When DeviceList mounts or the pathname is '/', fetch data and show loader.
-    // location.pathname will be '/' per configured route.
     load();
     mountedRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,13 +74,13 @@ export const DeviceList: React.FC = () => {
     setPingLoadingId(null);
   }
 
-  // Manual refresh action (optional future-use)
+  // Manual refresh action
   async function handleRefresh() {
     await load();
   }
 
   return (
-    <div className="container">
+    <div className="container" aria-busy={loading}>
       <div className="navbar">
         <h1 className="title">Devices</h1>
         <div style={{ display: 'flex', gap: 8 }}>
@@ -87,6 +89,8 @@ export const DeviceList: React.FC = () => {
             className="btn btn-small"
             onClick={handleRefresh}
             aria-label="Refresh devices"
+            data-testid="refresh-devices"
+            aria-busy={loading}
           >
             Refresh
           </button>
