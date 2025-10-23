@@ -7,7 +7,7 @@ A lightweight React application to manage network devices. It supports listing, 
 - Create/Edit device forms with validation (including IPv4)
 - Device detail view with status indicator and last-checked timestamp
 - Delete with confirmation dialog
-- Manual status refresh (ping) per device
+- Manual status refresh (ping) per device and list
 - Accessible UI (ARIA for dialogs, labels, focus mgmt)
 - Loading indicators (devices list shows a loader on navigation or refetch)
 - Test hooks via `data-testid` attributes
@@ -62,7 +62,8 @@ Navigation notes:
 ### Test hooks
 - Loader: `data-testid="devices-loading"`
 - Table rows: `data-testid="device-row-<id>"`
-- Other controls retained as previously documented.
+- Other controls:
+  - `submit-button`, `delete-button`, `status-badge-<id>`, `search-input`, `sort-<column>`, `confirm-delete-button`, `cancel-button`, `back-button`
 
 ## API
 The app uses the provided OpenAPI spec endpoints:
@@ -75,8 +76,6 @@ The app uses the provided OpenAPI spec endpoints:
 - No heavy UI libs; plain CSS in `src/styles.css`
 - Client-side search/sort with debounced input
 - Form validation includes IPv4 check
-- Data test ids:
-  - `device-row-<id>`, `submit-button`, `delete-button`, `status-badge-<id>`, `search-input`, `sort-<column>`, `confirm-delete-button`, `cancel-button`, `back-button`, `devices-loading`
 
 ## Environment Variables
-- `REACT_APP_API_BASE` (optional): base URL to prepend before `/api`. Default is empty (same origin).
+- `REACT_APP_API_BASE` (optional): base URL which will be prepended before `/api`. Default is same-origin.
