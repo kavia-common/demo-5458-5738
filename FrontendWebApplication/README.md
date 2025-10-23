@@ -1,82 +1,71 @@
-# Lightweight React Template for KAVIA
+# Device Management Frontend (React)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A lightweight React application to manage network devices. It supports listing, searching, sorting, creating, editing, deleting, and checking status (ping) of devices. Integrates with a backend REST API mounted under the `/api` base path.
 
 ## Features
-
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Sortable/searchable device table
+- Create/Edit device forms with validation (including IPv4)
+- Device detail view with status indicator and last-checked timestamp
+- Delete with confirmation dialog
+- Manual status refresh (ping) per device
+- Accessible UI (ARIA for dialogs, labels, focus mgmt)
+- Test hooks via `data-testid` attributes
+- Environment-configurable API base
 
 ## Getting Started
 
-In the project directory, you can run:
+### Prerequisites
+- Node.js 18+ and npm
 
-### `npm start`
-
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+### Install
+```bash
+npm install
 ```
 
-### Components
+### Run (dev)
+```bash
+npm start
+```
+Open http://localhost:3000
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+By default, the frontend calls the backend at same origin with base `/api`. To target another host/port, set `REACT_APP_API_BASE`:
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+Create `.env`:
+```
+REACT_APP_API_BASE=http://localhost:5000
+```
 
-## Learn More
+Or see `.env.example`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Build
+```bash
+npm run build
+```
 
-### Code Splitting
+### Test
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Routes
+- `/` devices list
+- `/devices/new` create device
+- `/devices/:id` device detail
+- `/devices/:id/edit` edit device
 
-### Analyzing the Bundle Size
+## API
+The app uses the provided OpenAPI spec endpoints:
+- GET/POST `/api/devices`
+- GET/PUT/DELETE `/api/devices/{id}`
+- POST/GET `/api/devices/{id}/status`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Development Notes
+- Functional components + hooks
+- No heavy UI libs; plain CSS in `src/styles.css`
+- Client-side search/sort with debounced input
+- Form validation includes IPv4 check
+- Data test ids:
+  - `device-row-<id>`, `submit-button`, `delete-button`, `status-badge-<id>`, `search-input`, `sort-<column>`, `confirm-delete-button`
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Environment Variables
+- `REACT_APP_API_BASE` (optional): base URL to prepend before `/api`. Default is empty (same origin).

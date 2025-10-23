@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders app container', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  // Assert main navigation title exists on list route
+  const heading = screen.getByText(/Devices/i);
+  expect(heading).toBeInTheDocument();
 });
