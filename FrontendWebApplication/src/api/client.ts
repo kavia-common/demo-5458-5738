@@ -1,5 +1,10 @@
 import { Device, DeviceInput, DeviceListResponse, StatusResponse, ApiError } from '../types';
 
+/**
+ * API client
+ * - Base URL is constructed from REACT_APP_API_BASE with default same-origin, and '/api' path segment.
+ * - All requests send and expect JSON.
+ */
 const API_BASE = (process.env.REACT_APP_API_BASE || '') + '/api';
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<{ data?: T; error?: ApiError; status: number }> {
@@ -18,7 +23,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<{ da
     const payload = isJson ? await res.json() : undefined;
 
     if (!res.ok) {
-      const error: ApiError = payload?.error ? payload : { error: res.statusText || 'Request failed', code: status };
+      const error: ApiError = (payload as any)?.error ? (payload as any) : { error: res.statusText || 'Request failed', code: status };
       return { error, status };
     }
     return { data: payload as T, status };
@@ -80,7 +85,10 @@ export const api = {
   },
 };
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE: Re-exported IPv4 validator so existing imports continue working.
+ * Prefer importing from "src/validation/ip" in new code.
+ */
 export function isValidIPv4(ip: string): boolean {
   // Validates IPv4 addresses, disallow leading zeros in octets unless zero itself
   const octets = ip.trim().split('.');

@@ -8,6 +8,14 @@ import './styles.css';
 
 // PUBLIC_INTERFACE
 export const App: React.FC = () => {
+  /**
+   * Root application component that sets up routes:
+   * - "/" devices list
+   * - "/devices/new" create device
+   * - "/devices/:id" device detail
+   * - "/devices/:id/edit" edit device
+   * Includes a catch-all redirect back to "/".
+   */
   return (
     <BrowserRouter>
       <Routes>

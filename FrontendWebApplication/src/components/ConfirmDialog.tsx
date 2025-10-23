@@ -22,6 +22,12 @@ export const ConfirmDialog: React.FC<Props> = ({
   onCancel,
   'data-testid': dataTestId,
 }) => {
+  /**
+   * Accessible modal confirmation dialog with:
+   * - keyboard Escape to close
+   * - focus management to first actionable control
+   * - data-testid passthrough for E2E tests
+   */
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstButtonRef = useRef<HTMLButtonElement>(null);
 

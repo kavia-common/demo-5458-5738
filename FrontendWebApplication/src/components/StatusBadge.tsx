@@ -8,6 +8,12 @@ interface Props {
 
 // PUBLIC_INTERFACE
 export const StatusBadge: React.FC<Props> = ({ status, idForTest }) => {
+  /**
+   * Accessible colored badge for device status:
+   * - Green: online
+   * - Red: offline
+   * - Gray: unknown
+   */
   const color = status === 'online' ? '#2e7d32' : status === 'offline' ? '#c62828' : '#6c757d';
   const label = status === 'online' ? 'Online' : status === 'offline' ? 'Offline' : 'Unknown';
   return (
