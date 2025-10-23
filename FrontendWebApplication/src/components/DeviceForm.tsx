@@ -7,10 +7,12 @@ interface Props {
   onSubmit: (values: DeviceInput) => Promise<void>;
   submitting?: boolean;
   error?: string | null;
+  // PUBLIC_INTERFACE
+  onCancel?: () => void; // optional cancel/back handler
 }
 
 // PUBLIC_INTERFACE
-export const DeviceForm: React.FC<Props> = ({ initial, onSubmit, submitting = false, error = null }) => {
+export const DeviceForm: React.FC<Props> = ({ initial, onSubmit, submitting = false, error = null, onCancel }) => {
   const [values, setValues] = useState<DeviceInput>({
     name: '',
     ip_address: '',
@@ -131,6 +133,17 @@ export const DeviceForm: React.FC<Props> = ({ initial, onSubmit, submitting = fa
         >
           {submitting ? 'Saving...' : 'Save'}
         </button>
+        {onCancel && (
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={onCancel}
+            data-testid="cancel-button"
+            aria-label="Cancel and go back"
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </form>
   );

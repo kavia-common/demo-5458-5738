@@ -53,6 +53,10 @@ npm test
 - `/devices/:id` device detail
 - `/devices/:id/edit` edit device
 
+Navigation notes:
+- After successfully creating a device, the app redirects back to the devices list (`/`).
+- The Add Device page provides both a Back button in the header and a Cancel button in the form. Both route back to the devices list without submitting.
+
 ## API
 The app uses the provided OpenAPI spec endpoints:
 - GET/POST `/api/devices`
@@ -65,7 +69,7 @@ The app uses the provided OpenAPI spec endpoints:
 - Client-side search/sort with debounced input
 - Form validation includes IPv4 check
 - Data test ids:
-  - `device-row-<id>`, `submit-button`, `delete-button`, `status-badge-<id>`, `search-input`, `sort-<column>`, `confirm-delete-button`
+  - `device-row-<id>`, `submit-button`, `delete-button`, `status-badge-<id>`, `search-input`, `sort-<column>`, `confirm-delete-button`, `cancel-button`, `back-button`
 
 ## Environment Variables
 - `REACT_APP_API_BASE` (optional): base URL to prepend before `/api`. Default is empty (same origin).
