@@ -3,9 +3,10 @@ import { Device, DeviceInput, DeviceListResponse, StatusResponse, ApiError } fro
 /**
  * API client
  * - Base URL resolution order:
- *    1) REACT_APP_API_BASE (used as-is)
+ *    1) REACT_APP_API_BASE (used as base; '/api' is appended)
  *    2) REACT_APP_BACKEND_URL + '/api'
  *    3) '/api' (same-origin default)
+ * Environment variables are provided via CRA at build time.
  * - All requests send and expect JSON.
  */
 const API_BASE = (() => {
