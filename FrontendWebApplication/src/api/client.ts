@@ -2,10 +2,23 @@ import { Device, DeviceInput, DeviceListResponse, StatusResponse, ApiError } fro
 
 /**
  * API client
- * - Base URL is constructed from REACT_APP_API_BASE with default same-origin, and '/api' path segment.
+ * - Base URL resolution order:
+ *    1) REACT_APP_API_BASE (used as-is)
+ *    2) REACT_APP_BACKEND_URL + '/api'
+ *    3) '/api' (same-origin default)
  * - All requests send and expect JSON.
  */
-const API_BASE = (process.env.REACT_APP_API_BASE || '') + '/api';
+const API_BASE = (() => {
+  const base = process.env.REACT_APP_API_BASE;
+  if (base && base.trim().length > 0) {
+    return base.trim().replace(/\/+$/, '') + '/api';
+  }
+  const backend = process.env.REACT_APP_BACKEND_URL;
+  if (backend && backend.trim().length > 0) {
+    return backend.trim().replace(/\/+$/, '') + '/api';
+  }
+  return '/api';
+})();
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<{ data?: T; error?: ApiError; status: number }> {
   const url = `${API_BASE}${path}`;

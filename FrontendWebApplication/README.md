@@ -29,14 +29,23 @@ npm start
 ```
 Open http://localhost:3000
 
-By default, the frontend calls the backend at same origin with base `/api`. To target another host/port, set `REACT_APP_API_BASE`:
+By default, the frontend calls the backend at same origin with base `/api`.
 
-Create `.env`:
+API base resolution precedence:
+1) If `REACT_APP_API_BASE` is set, the app uses `${REACT_APP_API_BASE}/api`.
+2) Else if `REACT_APP_BACKEND_URL` is set, the app uses `${REACT_APP_BACKEND_URL}/api`.
+3) Else default to `/api`.
+
+Examples (.env):
 ```
+# Option A: explicit base
 REACT_APP_API_BASE=http://localhost:5000
+
+# Option B: backend root host:port (the app appends /api)
+# REACT_APP_BACKEND_URL=http://localhost:5000
 ```
 
-Or see `.env.example`.
+See `.env.example` for more variables.
 
 ### Build
 ```bash
